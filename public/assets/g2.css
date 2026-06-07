@@ -1,0 +1,277 @@
+/* ============================= */
+/* LOGIN MODELO AZUL COM FONTE COMUM */
+/* ============================= */
+
+.login-modelo-page,
+.login-modelo-page *,
+.login-modelo-page button,
+.login-modelo-page input,
+.login-modelo-page a,
+.login-modelo-page p,
+.login-modelo-page span,
+.login-modelo-page strong,
+.login-modelo-page small,
+.login-modelo-page h1 {
+    font-family: Arial, Helvetica, sans-serif !important;
+    box-sizing: border-box !important;
+}
+
+.login-modelo-page {
+    min-height: 100vh;
+    margin: 0;
+    background:
+        radial-gradient(circle at 7% 55%, rgba(68, 145, 255, 0.28) 0, rgba(68, 145, 255, 0.18) 15%, transparent 28%),
+        radial-gradient(circle at 88% 0%, rgba(88, 170, 255, 0.32) 0, rgba(88, 170, 255, 0.22) 20%, transparent 37%),
+        radial-gradient(circle at 52% 60%, rgba(255, 255, 255, 0.04) 0, transparent 28%),
+        linear-gradient(135deg, #0648a8 0%, #0756c7 42%, #003c96 100%);
+    overflow: hidden;
+}
+
+.login-modelo-wrapper {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+}
+
+.login-modelo-card {
+    width: 100%;
+    max-width: 398px;
+    background: rgba(255, 255, 255, 0.94);
+    border: 1px solid rgba(255, 255, 255, 0.78);
+    border-radius: 18px;
+    padding: 28px 28px 20px;
+    box-shadow: 0 28px 65px rgba(0, 25, 78, 0.32);
+    backdrop-filter: blur(18px);
+    -webkit-backdrop-filter: blur(18px);
+    overflow: hidden;
+}
+
+.login-modelo-card h1 {
+    margin: 0 0 8px;
+    font-size: 30px;
+    line-height: 1.15;
+    color: #0b4aa8;
+    font-weight: 800;
+}
+
+.login-modelo-tipo p {
+    margin: 0 0 15px;
+    font-size: 13px;
+    color: #617090;
+    font-weight: 800;
+}
+
+.login-modelo-opcoes {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+    margin-bottom: 24px;
+}
+
+.login-modelo-opcao {
+    min-height: 110px;
+    padding: 12px 10px;
+    border: 1px solid #d4def2;
+    border-radius: 14px;
+    background: rgba(255, 255, 255, 0.72);
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    transition: 0.2s;
+}
+
+.login-modelo-opcao.ativo,
+.login-modelo-opcao:hover {
+    border-color: #bed0f4;
+    background: rgba(250, 253, 255, 0.9);
+    box-shadow: 0 8px 20px rgba(31, 94, 190, 0.08);
+}
+
+.login-modelo-icone {
+    width: 36px;
+    height: 36px;
+    border-radius: 10px;
+    background: #dfeaff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #2863cf;
+    font-size: 20px;
+    font-weight: 700;
+}
+
+.login-modelo-opcao strong {
+    font-size: 14px;
+    color: #1451ae;
+    font-weight: 800;
+}
+
+.login-modelo-opcao small {
+    font-size: 11px;
+    color: #5f7194;
+    font-weight: 700;
+    text-align: center;
+}
+
+.login-modelo-campo {
+    width: 100%;
+    margin-bottom: 18px;
+}
+
+.login-modelo-campo label {
+    display: block;
+    font-size: 14px;
+    color: #1f2b3d;
+    font-weight: 800;
+    margin-bottom: 8px;
+}
+
+.login-modelo-campo input {
+    width: 100% !important;
+    max-width: 100% !important;
+    height: 48px;
+    border: none;
+    outline: none;
+    border-radius: 14px;
+    background: #edf2fa;
+    color: #26364d;
+    font-size: 14px;
+    font-weight: 700;
+    padding: 0 14px;
+    box-shadow:
+        inset 0 1px 3px rgba(25, 50, 90, 0.08),
+        0 1px 0 rgba(255, 255, 255, 0.8);
+}
+
+.login-modelo-campo input::placeholder {
+    color: #8a97aa;
+}
+
+.login-modelo-campo input:focus {
+    background: #f5f8fe;
+    box-shadow:
+        0 0 0 2px rgba(31, 94, 190, 0.16),
+        inset 0 1px 3px rgba(25, 50, 90, 0.08);
+}
+
+.login-modelo-senha {
+    position: relative;
+    width: 100%;
+    max-width: 100%;
+    overflow: hidden;
+    border-radius: 14px;
+}
+
+.login-modelo-senha input {
+    width: 100% !important;
+    max-width: 100% !important;
+    display: block;
+    padding-right: 48px !important;
+}
+
+.login-modelo-olho {
+    position: absolute;
+    right: 14px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 22px;
+    height: 22px;
+    border: none;
+    background: transparent;
+    color: #2563eb;
+    cursor: pointer;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.login-modelo-olho svg {
+    width: 18px;
+    height: 18px;
+    display: block;
+}
+
+.login-modelo-esqueceu {
+    text-align: right;
+    margin-top: -4px;
+    margin-bottom: 20px;
+}
+
+.login-modelo-esqueceu a {
+    color: #145bec;
+    font-size: 12px;
+    font-weight: 800;
+    text-decoration: none;
+}
+
+.login-modelo-botao {
+    width: 100%;
+    height: 48px;
+    border: none;
+    border-radius: 14px;
+    background: linear-gradient(180deg, #1264d7 0%, #074ab3 100%);
+    color: white;
+    font-size: 16px;
+    font-weight: 800;
+    cursor: pointer;
+    box-shadow: 0 10px 21px rgba(4, 64, 160, 0.38);
+    transition: 0.2s;
+}
+
+.login-modelo-botao:hover {
+    transform: translateY(-1px);
+}
+
+.login-modelo-criar {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 5px;
+    margin-top: 18px;
+    font-size: 12px;
+    color: #8190a7;
+    font-weight: 800;
+    flex-wrap: wrap;
+}
+
+.login-modelo-criar a {
+    color: #0756c7;
+    text-decoration: none;
+    font-weight: 900;
+}
+
+.login-modelo-erro {
+    background: rgba(254, 226, 226, 0.9);
+    color: #991b1b;
+    border-radius: 8px;
+    padding: 10px;
+    margin-bottom: 14px;
+    font-size: 12px;
+    font-weight: 700;
+}
+
+@media (max-width: 420px) {
+    .login-modelo-card {
+        max-width: calc(100vw - 40px);
+        padding: 24px 20px 18px;
+    }
+
+    .login-modelo-card h1 {
+        font-size: 26px;
+    }
+
+    .login-modelo-opcoes {
+        grid-template-columns: 1fr;
+    }
+
+    .login-modelo-opcao {
+        min-height: 90px;
+    }
+}
