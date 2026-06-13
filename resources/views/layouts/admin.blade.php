@@ -2,44 +2,42 @@
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8">
-    <title>Painel Admin</title>
-    @vite('resources/css/app.css')
+    <title>Painel Jornalista</title>
+    @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
 
 <body class="bg-gray-100 flex">
 
-    <!-- SIDEBAR -->
-    <aside class="w-64 h-screen bg-blue-900 text-white p-5 fixed">
+<!-- SIDEBAR -->
+<aside class="w-64 h-screen bg-blue-900 text-white fixed p-5">
 
-        <h1 class="text-2xl font-bold mb-8">📰 Jornal Admin</h1>
+    <h1 class="text-2xl font-bold mb-6">📰 Jornal</h1>
 
-        <nav class="flex flex-col gap-3">
+    <nav class="flex flex-col gap-3">
 
-            <a href="{{ route('admin.categories.index') }}"
-               class="hover:bg-blue-700 p-2 rounded">
-                Categorias
-            </a>
+        <a href="/admin/dashboard" class="hover:bg-blue-700 p-2 rounded">
+            Dashboard
+        </a>
 
-            <a href="{{ route('admin.articles.index') }}"
-               class="hover:bg-blue-700 p-2 rounded">
-                Matérias
-            </a>
+        <a href="/admin/categories" class="hover:bg-blue-700 p-2 rounded">
+            Categorias
+        </a>
 
-            <a href="{{ route('admin.gallery.index') }}"
-               class="hover:bg-blue-700 p-2 rounded">
-                Galeria
-            </a>
+        <a href="/admin/news" class="hover:bg-blue-700 p-2 rounded">
+            Matérias
+        </a>
 
-        </nav>
+        <a href="/admin/gallery" class="hover:bg-blue-700 p-2 rounded">
+            Galeria
+        </a>
 
-    </aside>
+    </nav>
 
-    <!-- CONTEÚDO -->
-    <main class="ml-64 w-full p-8">
+</aside>
 
-        @yield('content')
-
-    </main>
+<main class="ml-64 p-8 w-full">
+    @yield('content')
+</main>
 
 </body>
 </html>

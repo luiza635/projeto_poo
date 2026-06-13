@@ -1,43 +1,36 @@
 <?php
 
+use Illuminate\Support\Facades\Route;
+
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\CommentController;
-use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
     return view('welcome');
-})->name('home');
-
-Route::get('/noticias/{id}', function ($id) {
-    return view('news.show', ['id' => $id]);
-})->name('news.show');
-
-Route::middleware('auth')->group(function () {
-    Route::post('/comentarios', [CommentController::class, 'store'])->name('comments.store');
-    Route::put('/comentarios/{comment}', [CommentController::class, 'update'])->name('comments.update');
-    Route::delete('/comentarios/{comment}', [CommentController::class, 'destroy'])->name('comments.destroy');
 });
 
-Route::get('/admin/dashboard', function () {
-    if (auth()->user()->email !== 'admin@email.com') {
-        return redirect()->route('home');
-    }
-
-    return view('admin.dashboard');
-})->middleware('auth')->name('admin.dashboard');
-
-Route::get('/dashboard', function () {
-    if (auth()->user()->email === 'admin@email.com') {
-        return redirect()->route('admin.dashboard');
-    }
-
-    return redirect()->route('home');
-})->middleware('auth')->name('dashboard');
-
 Route::middleware('auth')->group(function () {
-    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
-    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
-    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+
+    Route::get('/home', function () {
+        return view('home');
+    });
+
+    Route::get('/profile', [ProfileController::class, 'edit']);
+    Route::patch('/profile', [ProfileController::class, 'update']);
+    Route::delete('/profile', [ProfileController::class, 'destroy']);
+
+    Route::post('/comentarios', [CommentController::class, 'store']);
+});
+
+Route::middleware(['auth', 'journalist'])->group(function () {
+
+    Route::get('/admin/dashboard', function () {
+        return view('admin.dashboard');
+    });
+
+    Route::get('/admin/news', fn() => view('admin.news.index'));
+    Route::get('/admin/categories', fn() => view('admin.categories.index'));
+    Route::get('/admin/gallery', fn() => view('admin.gallery.index'));
 });
 
 require __DIR__.'/auth.php';

@@ -2,150 +2,80 @@
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8">
-    <title>Login - G2 Notícias</title>
-    <link rel="stylesheet" href="/assets/g2.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+
+    @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
-<body class="login-modelo-page">
 
-<main class="login-modelo-wrapper">
+<body class="bg-gray-100 min-h-screen flex items-center justify-center">
 
-    <section class="login-modelo-card">
-        <h1>Bem-vindo(a)</h1>
+<div class="w-[1100px] bg-white rounded-2xl shadow-2xl flex overflow-hidden">
 
-        <form method="POST" action="{{ route('login') }}">
+    <!-- ESQUERDA -->
+    <div class="w-1/2 bg-gradient-to-br from-blue-700 to-blue-900 text-white p-14 flex flex-col justify-center relative">
+
+        <div class="absolute w-40 h-40 bg-white/10 rounded-full top-10 right-10"></div>
+        <div class="absolute w-60 h-60 bg-white/10 rounded-full bottom-[-40px] right-[-40px]"></div>
+
+        <h1 class="text-4xl font-bold mb-2">BEM-VINDO</h1>
+
+        <p class="text-blue-100 font-semibold mb-4">
+            PORTAL DE JORNALISMO ONLINE
+        </p>
+
+        <p class="text-sm text-blue-100 leading-relaxed">
+            Sistema moderno para jornalistas e leitores.
+        </p>
+
+    </div>
+
+    <!-- DIREITA -->
+    <div class="w-1/2 p-10 flex flex-col justify-center">
+
+        <div class="flex items-center gap-3 mb-3">
+
+            <img src="https://laravel.com/img/logomark.min.svg"
+                 class="w-10 h-10"
+                 alt="Laravel">
+
+            <div>
+                <h2 class="text-2xl font-bold text-gray-800">Entrar</h2>
+                <p class="text-sm text-gray-500">Acesse sua conta</p>
+            </div>
+
+        </div>
+
+        @if ($errors->any())
+            <div class="bg-red-100 text-red-600 p-2 rounded mb-3">
+                {{ $errors->first() }}
+            </div>
+        @endif
+
+        <!-- FORM LOGIN -->
+        <form method="POST" action="{{ route('login') }}" class="space-y-4">
+
             @csrf
 
-            <div class="login-modelo-tipo">
-                <p>Tipo de acesso</p>
+            <input type="email"
+                   name="email"
+                   placeholder="E-mail"
+                   class="w-full border rounded-lg p-3">
 
-                <div class="login-modelo-opcoes">
-                    <button type="button" class="login-modelo-opcao ativo" id="btnJornalista">
-                        <div class="login-modelo-icone">
-                            ♢
-                        </div>
+            <input type="password"
+                   name="password"
+                   placeholder="Senha"
+                   class="w-full border rounded-lg p-3">
 
-                        <strong>Jornalista</strong>
-                        <small>Criar e editar matérias</small>
-                    </button>
-
-                    <button type="button" class="login-modelo-opcao" id="btnLeitor">
-                        <div class="login-modelo-icone">
-                            ♙
-                        </div>
-
-                        <strong>Leitor</strong>
-                        <small>Ler e Comentar</small>
-                    </button>
-                </div>
-            </div>
-
-            <input type="hidden" name="tipo_acesso" id="tipoAcesso" value="jornalista">
-
-            @if ($errors->any())
-                <div class="login-modelo-erro">
-                    Verifique seu e-mail e senha.
-                </div>
-            @endif
-
-            <div class="login-modelo-campo">
-                <label for="email">E-mail</label>
-                <input
-                    id="email"
-                    type="email"
-                    name="email"
-                    value="{{ old('email') }}"
-                    required
-                    autofocus
-                    autocomplete="username"
-                    placeholder="seu@email.com.br"
-                >
-            </div>
-
-            <div class="login-modelo-campo">
-                <label for="password">Senha</label>
-
-                <div class="login-modelo-senha">
-                    <input
-                        id="password"
-                        type="password"
-                        name="password"
-                        required
-                        autocomplete="current-password"
-                        placeholder="••••••••"
-                    >
-
-                    <button type="button" id="toggleSenha" class="login-modelo-olho" aria-label="Mostrar senha">
-                        <svg id="iconeOlho" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <path d="M2 12s3.5-6 10-6 10 6 10 6-3.5 6-10 6-10-6-10-6z"></path>
-                            <circle cx="12" cy="12" r="3"></circle>
-                        </svg>
-                    </button>
-                </div>
-            </div>
-
-            <div class="login-modelo-esqueceu">
-                @if (Route::has('password.request'))
-                    <a href="{{ route('password.request') }}">Esqueceu a senha?</a>
-                @endif
-            </div>
-
-            <button type="submit" class="login-modelo-botao">
-                Entrar
+            <button class="w-full bg-blue-700 hover:bg-blue-800 text-white p-3 rounded-lg font-semibold">
+                ENTRAR
             </button>
 
-            @if (Route::has('register'))
-                <div class="login-modelo-criar">
-                    <span>Não tem uma Conta?</span>
-                    <a href="{{ route('register') }}">Criar uma conta</a>
-                </div>
-            @endif
         </form>
-    </section>
 
-</main>
+    </div>
 
-<script>
-    const btnJornalista = document.getElementById('btnJornalista');
-    const btnLeitor = document.getElementById('btnLeitor');
-    const tipoAcesso = document.getElementById('tipoAcesso');
-    const toggleSenha = document.getElementById('toggleSenha');
-    const password = document.getElementById('password');
-    const iconeOlho = document.getElementById('iconeOlho');
-
-    btnJornalista.addEventListener('click', function () {
-        btnJornalista.classList.add('ativo');
-        btnLeitor.classList.remove('ativo');
-        tipoAcesso.value = 'jornalista';
-    });
-
-    btnLeitor.addEventListener('click', function () {
-        btnLeitor.classList.add('ativo');
-        btnJornalista.classList.remove('ativo');
-        tipoAcesso.value = 'leitor';
-    });
-
-    toggleSenha.addEventListener('click', function () {
-        if (password.type === 'password') {
-            password.type = 'text';
-            toggleSenha.setAttribute('aria-label', 'Ocultar senha');
-
-            iconeOlho.innerHTML = `
-                <path d="M17.94 17.94A10.94 10.94 0 0 1 12 19c-6.5 0-10-7-10-7a21.77 21.77 0 0 1 5.06-5.94"></path>
-                <path d="M9.9 4.24A10.68 10.68 0 0 1 12 4c6.5 0 10 8 10 8a21.29 21.29 0 0 1-2.17 3.19"></path>
-                <path d="M14.12 14.12A3 3 0 0 1 9.88 9.88"></path>
-                <path d="M1 1l22 22"></path>
-            `;
-        } else {
-            password.type = 'password';
-            toggleSenha.setAttribute('aria-label', 'Mostrar senha');
-
-            iconeOlho.innerHTML = `
-                <path d="M2 12s3.5-6 10-6 10 6 10 6-3.5 6-10 6-10-6-10-6z"></path>
-                <circle cx="12" cy="12" r="3"></circle>
-            `;
-        }
-    });
-</script>
+</div>
 
 </body>
 </html>
