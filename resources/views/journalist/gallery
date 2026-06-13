@@ -1,0 +1,40 @@
+<?php
+
+namespace App\Http\Controllers;
+
+use App\Models\GalleryImage;
+use Illuminate\Http\Request;
+
+class JournalistGalleryController extends Controller
+{
+    public function store(Request $request)
+    {
+        $request->validate([
+            'title' => 'required',
+            'image_url' => 'required'
+        ]);
+
+        GalleryImage::create([
+            'category_id' => $request->category_id,
+            'title' => $request->title,
+            'description' => $request->description,
+            'image_url' => $request->image_url,
+            'photographer' => $request->photographer,
+            'taken_at' => $request->taken_at
+        ]);
+
+        return back();
+    }
+
+    public function update(Request $request, GalleryImage $galerium)
+    {
+        $galerium->update($request->all());
+        return back();
+    }
+
+    public function destroy(GalleryImage $galerium)
+    {
+        $galerium->delete();
+        return back();
+    }
+}

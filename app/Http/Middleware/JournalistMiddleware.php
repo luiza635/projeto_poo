@@ -4,15 +4,16 @@ namespace App\Http\Middleware;
 
 use Closure;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class JournalistMiddleware
 {
     public function handle(Request $request, Closure $next)
     {
-        if (auth()->check() && auth()->user()->role === 'journalist') {
-            return $next($request);
+        if (!Auth::check()) {
+            return redirect('/login');
         }
 
-        return redirect('/home');
+        return $next($request);
     }
 }

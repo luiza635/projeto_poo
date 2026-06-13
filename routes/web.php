@@ -20,17 +20,51 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy']);
 
     Route::post('/comentarios', [CommentController::class, 'store']);
-});
 
-Route::middleware(['auth', 'journalist'])->group(function () {
+    Route::middleware('journalist')->group(function () {
 
-    Route::get('/admin/dashboard', function () {
-        return view('admin.dashboard');
+        Route::get('/jornalista', function () {
+            return view('journalist.dashboard');
+        });
+
+        Route::get('/jornalista/materias', function () {
+            return view('journalist.news.index');
+        });
+
+        Route::get('/jornalista/categorias', function () {
+            return view('journalist.categories.index');
+        });
+
+        Route::get('/jornalista/galeria', function () {
+            return view('journalist.gallery.index');
+        });
     });
 
-    Route::get('/admin/news', fn() => view('admin.news.index'));
-    Route::get('/admin/categories', fn() => view('admin.categories.index'));
-    Route::get('/admin/gallery', fn() => view('admin.gallery.index'));
+    Route::prefix('admin')->middleware('journalist')->group(function () {
+
+        Route::get('/dashboard', function () {
+            return view('admin.dashboard');
+        });
+
+        Route::get('/news', function () {
+            return view('admin.news.index');
+        });
+
+        Route::get('/categories', function () {
+            return view('admin.categories.index');
+        });
+
+        Route::get('/gallery', function () {
+            return view('admin.gallery.index');
+        });
+    });
 });
 
 require __DIR__.'/auth.php';
+Route::middleware(['auth', 'journalist'])->group(function () {
+
+    Route::get('/jornalista', function () {
+        return view('journalist.dashboard');
+    });
+
+});

@@ -1,0 +1,44 @@
+<?php
+
+namespace App\Http\Controllers;
+
+use App\Models\Category;
+use Illuminate\Http\Request;
+use Illuminate\Support\Str;
+
+class JournalistCategoryController extends Controller
+{
+    public function store(Request $request)
+    {
+        $request->validate([
+            'name' => 'required'
+        ]);
+
+        Category::create([
+            'name' => $request->name,
+            'slug' => Str::slug($request->name),
+            'color' => '#1457b8',
+            'order' => 1,
+            'active' => true
+        ]);
+
+        return back();
+    }
+
+    public function update(Request $request, Category $categoria)
+    {
+        $categoria->update([
+            'name' => $request->name,
+            'slug' => Str::slug($request->name),
+            'color' => $request->color ?? '#1457b8',
+        ]);
+
+        return back();
+    }
+
+    public function destroy(Category $categoria)
+    {
+        $categoria->delete();
+        return back();
+    }
+}
