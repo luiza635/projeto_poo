@@ -16,25 +16,19 @@ class AuthenticatedSessionController extends Controller
     public function store(Request $request)
     {
         $credentials = $request->validate([
-            'email' => ['required', 'email'],
-            'password' => ['required'],
+            'email' => 'required|email',
+            'password' => 'required'
         ]);
 
         if (!Auth::attempt($credentials)) {
             return back()->withErrors([
-                'email' => 'Credenciais inválidas',
+                'email' => 'Credenciais inválidas'
             ]);
         }
 
         $request->session()->regenerate();
 
-        $user = Auth::user();
-
-        if ($user->role === 'journalist') {
-            return redirect('/admin/dashboard');
-        }
-
-        return redirect('/home');
+        return redirect('/jornalista');
     }
 
     public function destroy(Request $request)

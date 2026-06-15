@@ -1,70 +1,39 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Auth;
 
-use App\Http\Controllers\ProfileController;
-use App\Http\Controllers\CommentController;
+use App\Http\Controllers\JournalistController;
+use App\Http\Controllers\ArticleController;
+use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\GalleryController;
 
 Route::get('/', function () {
-    return view('welcome');
+    if (Auth::check()) {
+        return redirect('/jornalista');
+    }
+
+    return redirect('/login');
 });
+
+Route::middleware('guest')->group(function () {
+    require __DIR__.'/auth.php';
+});
+
+Route::get('/jornalista', [JournalistController::class, 'dashboard'])
+    ->middleware('auth')
+    ->name('jornalista');
 
 Route::middleware('auth')->group(function () {
-
-    Route::get('/home', function () {
-        return view('home');
-    });
-
-    Route::get('/profile', [ProfileController::class, 'edit']);
-    Route::patch('/profile', [ProfileController::class, 'update']);
-    Route::delete('/profile', [ProfileController::class, 'destroy']);
-
-    Route::post('/comentarios', [CommentController::class, 'store']);
-
-    Route::middleware('journalist')->group(function () {
-
-        Route::get('/jornalista', function () {
-            return view('journalist.dashboard');
-        });
-
-        Route::get('/jornalista/materias', function () {
-            return view('journalist.news.index');
-        });
-
-        Route::get('/jornalista/categorias', function () {
-            return view('journalist.categories.index');
-        });
-
-        Route::get('/jornalista/galeria', function () {
-            return view('journalist.gallery.index');
-        });
-    });
-
-    Route::prefix('admin')->middleware('journalist')->group(function () {
-
-        Route::get('/dashboard', function () {
-            return view('admin.dashboard');
-        });
-
-        Route::get('/news', function () {
-            return view('admin.news.index');
-        });
-
-        Route::get('/categories', function () {
-            return view('admin.categories.index');
-        });
-
-        Route::get('/gallery', function () {
-            return view('admin.gallery.index');
-        });
-    });
+    Route::resource('articles', ArticleController::class);
+    Route::resource('categories', CategoryController::class);
+    Route::resource('gallery', GalleryController::class);
 });
 
-require __DIR__.'/auth.php';
-Route::middleware(['auth', 'journalist'])->group(function () {
+Route::post('/logout', function () {
+    Auth::logout();
+    request()->session()->invalidate();
+    request()->session()->regenerateToken();
 
-    Route::get('/jornalista', function () {
-        return view('journalist.dashboard');
-    });
-
-});
+    return redirect('/login');
+})->name('logout');
