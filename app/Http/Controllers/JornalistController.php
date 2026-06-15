@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Article;
 use App\Models\Category;
 use App\Models\Gallery;
+use Illuminate\Http\Request;
 
 class JournalistController extends Controller
 {

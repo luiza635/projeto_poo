@@ -2,33 +2,65 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Category;
+use App\Models\Gallery;
 use Illuminate\Http\Request;
 
-class CategoryController extends Controller
+class GalleryController extends Controller
 {
     public function index()
     {
-        $categories = Category::all();
-        return view('journalist.categories.index', compact('categories'));
+        $galleries = Gallery::latest()->get();
+        return view('journalist.gallery.index', compact('galleries'));
+    }
+
+    public function create()
+    {
+        return view('journalist.gallery.create');
     }
 
     public function store(Request $request)
     {
-        $request->validate([
-            'name' => 'required'
+        $data = $request->validate([
+            'title' => 'required',
+            'category' => 'nullable',
+            'image' => 'required|image'
         ]);
 
-        Category::create([
-            'name' => $request->name
-        ]);
+        $path = $request->file('image')->store('gallery', 'public');
+        $data['image'] = $path;
 
-        return back();
+        Gallery::create($data);
+
+        return redirect()->route('gallery.index');
     }
 
-    public function destroy($id)
+    public function edit(Gallery $gallery)
     {
-        Category::destroy($id);
+        return view('journalist.gallery.edit', compact('gallery'));
+    }
+
+    public function update(Request $request, Gallery $gallery)
+    {
+        $data = $request->validate([
+            'title' => 'required',
+            'category' => 'nullable',
+            'image' => 'nullable|image'
+        ]);
+
+        if ($request->hasFile('image')) {
+            $path = $request->file('image')->store('gallery', 'public');
+            $data['image'] = $path;
+        }
+
+        $gallery->update($data);
+
+        return redirect()->route('gallery.index');
+    }
+
+    public function destroy(Gallery $gallery)
+    {
+        $gallery->delete();
+
         return back();
     }
 }

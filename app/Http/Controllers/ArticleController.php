@@ -2,13 +2,15 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Article;
 use Illuminate\Http\Request;
 
 class ArticleController extends Controller
 {
     public function index()
     {
-        return view('journalist.articles.index');
+        $articles = Article::latest()->get();
+        return view('journalist.articles.index', compact('articles'));
     }
 
     public function create()
@@ -18,7 +20,41 @@ class ArticleController extends Controller
 
     public function store(Request $request)
     {
-        // salva no banco (se tiver model depois)
+        $data = $request->validate([
+            'title' => 'required',
+            'subtitle' => 'nullable',
+            'body' => 'required',
+            'image_url' => 'nullable'
+        ]);
+
+        Article::create($data);
+
+        return redirect()->route('articles.index');
+    }
+
+    public function edit(Article $article)
+    {
+        return view('journalist.articles.edit', compact('article'));
+    }
+
+    public function update(Request $request, Article $article)
+    {
+        $data = $request->validate([
+            'title' => 'required',
+            'subtitle' => 'nullable',
+            'body' => 'required',
+            'image_url' => 'nullable'
+        ]);
+
+        $article->update($data);
+
+        return redirect()->route('articles.index');
+    }
+
+    public function destroy(Article $article)
+    {
+        $article->delete();
+
         return redirect()->route('articles.index');
     }
 }

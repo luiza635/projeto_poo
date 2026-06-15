@@ -2,32 +2,42 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Gallery;
 use Illuminate\Http\Request;
-use App\Models\GalleryImage;
 
 class GalleryController extends Controller
 {
     public function index()
     {
-        $images = GalleryImage::latest()->get();
-        return view('journalist.gallery.index', compact('images'));
+        $galleries = Gallery::latest()->get();
+        return view('journalist.gallery.index', compact('galleries'));
+    }
+
+    public function create()
+    {
+        return view('journalist.gallery.create');
     }
 
     public function store(Request $request)
     {
-        $path = $request->file('image')->store('gallery', 'public');
-
-        GalleryImage::create([
-            'title' => $request->title,
-            'image' => $path
+        $data = $request->validate([
+            'title' => 'required',
+            'category' => 'nullable',
+            'image' => 'required|image'
         ]);
 
-        return back();
+        // salva imagem corretamente
+        $path = $request->file('image')->store('gallery', 'public');
+        $data['image'] = $path;
+
+        Gallery::create($data);
+
+        return redirect()->route('gallery.index');
     }
 
-    public function destroy($id)
+    public function destroy(Gallery $gallery)
     {
-        GalleryImage::destroy($id);
+        $gallery->delete();
         return back();
     }
 }

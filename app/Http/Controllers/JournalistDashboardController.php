@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Article;
 use App\Models\Category;
-use App\Models\GalleryImage;
+use App\Models\Gallery;
 use Illuminate\View\View;
 
 class JournalistDashboardController extends Controller
@@ -31,7 +31,7 @@ class JournalistDashboardController extends Controller
             ->take(5)
             ->get();
 
-        $galleryImages = GalleryImage::with('category')
+        $gallery = Gallery::with('category')
             ->latest()
             ->get();
 
@@ -40,7 +40,7 @@ class JournalistDashboardController extends Controller
             'featuredArticle',
             'articles',
             'mostRead',
-            'galleryImages'
+            'gallery'
         ));
     }
 }

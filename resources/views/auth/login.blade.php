@@ -78,7 +78,7 @@
 
             @csrf
 
-            <!-- ROLE REAL -->
+            <!-- ROLE (mantido, mas seguro) -->
             <input type="hidden" name="role" id="role" value="user">
 
             <input type="email"
@@ -119,7 +119,7 @@
 
 </div>
 
-<!-- SCRIPT TOGGLE (CORRIGIDO) -->
+<!-- SCRIPT TOGGLE (CORRIGIDO SEM BUG VISUAL) -->
 <script>
 function setRole(role) {
 
@@ -129,12 +129,15 @@ function setRole(role) {
     const journalistBtn = document.getElementById('btn-journalist');
 
     if (role === 'user') {
+
         userBtn.classList.add('bg-blue-600','text-white');
         userBtn.classList.remove('text-gray-600');
 
         journalistBtn.classList.remove('bg-blue-600','text-white');
         journalistBtn.classList.add('text-gray-600');
+
     } else {
+
         journalistBtn.classList.add('bg-blue-600','text-white');
         journalistBtn.classList.remove('text-gray-600');
 

@@ -17,14 +17,16 @@ class JournalistCategoryController extends Controller
         ]);
 
         $data['slug'] = Str::slug($data['name']);
-        $data['position'] = Category::max('position') + 1;
+
+        // ✔ evita erro quando não existe nenhuma categoria
+        $data['position'] = (Category::max('position') ?? 0) + 1;
 
         Category::create($data);
 
         return back()->with('success', 'Categoria criada com sucesso!');
     }
 
-    public function update(Request $request, Category $categoria): RedirectResponse
+    public function update(Request $request, Category $category): RedirectResponse
     {
         $data = $request->validate([
             'name' => ['required', 'string', 'max:80'],
@@ -33,14 +35,14 @@ class JournalistCategoryController extends Controller
 
         $data['slug'] = Str::slug($data['name']);
 
-        $categoria->update($data);
+        $category->update($data);
 
         return back()->with('success', 'Categoria atualizada com sucesso!');
     }
 
-    public function destroy(Category $categoria): RedirectResponse
+    public function destroy(Category $category): RedirectResponse
     {
-        $categoria->delete();
+        $category->delete();
 
         return back()->with('success', 'Categoria excluída com sucesso!');
     }
