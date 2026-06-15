@@ -16,15 +16,14 @@ class AuthenticatedSessionController extends Controller
     public function store(Request $request)
     {
         $credentials = $request->validate([
-            'email' => ['required', 'email'],
-            'password' => ['required']
+            'email' => 'required|email',
+            'password' => 'required'
         ]);
 
-        // LOGIN PADRÃO LARAVEL
         if (!Auth::attempt($credentials)) {
             return back()->withErrors([
-                'email' => 'Credenciais inválidas'
-            ])->withInput();
+                'email' => 'E-mail ou senha inválidos'
+            ]);
         }
 
         $request->session()->regenerate();

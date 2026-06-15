@@ -9,13 +9,9 @@ class GalleryController extends Controller
 {
     public function index()
     {
-        $galleries = Gallery::latest()->get();
-        return view('journalist.gallery.index', compact('galleries'));
-    }
-
-    public function create()
-    {
-        return view('journalist.gallery.create');
+        return view('journalist.gallery.index', [
+            'galleries' => Gallery::latest()->get()
+        ]);
     }
 
     public function store(Request $request)
@@ -26,13 +22,11 @@ class GalleryController extends Controller
             'image' => 'required|image'
         ]);
 
-        // salva imagem corretamente
-        $path = $request->file('image')->store('gallery', 'public');
-        $data['image'] = $path;
+        $data['image'] = $request->file('image')->store('gallery', 'public');
 
         Gallery::create($data);
 
-        return redirect()->route('gallery.index');
+        return back();
     }
 
     public function destroy(Gallery $gallery)

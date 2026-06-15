@@ -10,9 +10,13 @@ return new class extends Migration
     {
         Schema::create('comments', function (Blueprint $table) {
             $table->id();
-            $table->integer('news_id');
-            $table->foreignId('user_id')->constrained()->onDelete('cascade');
-            $table->text('content');
+
+            // 🔥 SEM FK
+            $table->unsignedBigInteger('user_id');
+            $table->unsignedBigInteger('article_id');
+
+            $table->text('comment');
+
             $table->timestamps();
         });
     }
@@ -22,3 +26,13 @@ return new class extends Migration
         Schema::dropIfExists('comments');
     }
 };
+Schema::create('comments', function (Blueprint $table) {
+    $table->id();
+
+    $table->unsignedBigInteger('user_id');
+    $table->unsignedBigInteger('article_id');
+
+    $table->text('comment');
+
+    $table->timestamps();
+});

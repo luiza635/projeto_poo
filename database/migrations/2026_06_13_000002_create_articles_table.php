@@ -10,18 +10,25 @@ return new class extends Migration
     {
         Schema::create('articles', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('category_id')->nullable()->constrained();
-            $table->foreignId('user_id')->nullable()->constrained();
+
+            // 🔥 SEM FOREIGN KEY (evita erro 150 MySQL)
+            $table->unsignedBigInteger('category_id')->nullable();
+            $table->unsignedBigInteger('user_id')->nullable();
+
             $table->string('title');
             $table->string('subtitle')->nullable();
             $table->longText('body');
             $table->string('image_url')->nullable();
+
             $table->boolean('is_featured')->default(false);
             $table->string('status')->default('draft');
+
             $table->integer('views')->default(0);
             $table->integer('likes')->default(0);
             $table->integer('comments_count')->default(0);
+
             $table->timestamp('published_at')->nullable();
+
             $table->timestamps();
         });
     }
@@ -31,3 +38,14 @@ return new class extends Migration
         Schema::dropIfExists('articles');
     }
 };
+Schema::create('articles', function (Blueprint $table) {
+    $table->id();
+
+    $table->unsignedBigInteger('category_id')->nullable();
+    $table->unsignedBigInteger('user_id')->nullable();
+
+    $table->string('title');
+    $table->longText('body');
+
+    $table->timestamps();
+});

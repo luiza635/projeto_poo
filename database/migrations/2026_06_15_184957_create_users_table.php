@@ -8,21 +8,19 @@ return new class extends Migration
 {
     public function up(): void
     {
-        Schema::create('gallery_images', function (Blueprint $table) {
+        Schema::create('users', function (Blueprint $table) {
             $table->id();
-
-            // ❌ SEM foreignId / constrained
-            $table->unsignedBigInteger('category_id')->nullable();
-
-            $table->string('title')->nullable();
-            $table->string('image');
-
+            $table->string('name');
+            $table->string('email')->unique(); 
+            $table->string('password');
+            $table->string('role')->default('user');
+            $table->rememberToken();
             $table->timestamps();
         });
     }
 
     public function down(): void
     {
-        Schema::dropIfExists('gallery_images');
+        Schema::dropIfExists('users');
     }
 };

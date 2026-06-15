@@ -9,8 +9,9 @@ class ArticleController extends Controller
 {
     public function index()
     {
-        $articles = Article::latest()->get();
-        return view('journalist.articles.index', compact('articles'));
+        return view('journalist.articles.index', [
+            'articles' => Article::latest()->get()
+        ]);
     }
 
     public function create()
@@ -20,14 +21,12 @@ class ArticleController extends Controller
 
     public function store(Request $request)
     {
-        $data = $request->validate([
+        Article::create($request->validate([
             'title' => 'required',
             'subtitle' => 'nullable',
             'body' => 'required',
             'image_url' => 'nullable'
-        ]);
-
-        Article::create($data);
+        ]));
 
         return redirect()->route('articles.index');
     }
@@ -39,14 +38,12 @@ class ArticleController extends Controller
 
     public function update(Request $request, Article $article)
     {
-        $data = $request->validate([
+        $article->update($request->validate([
             'title' => 'required',
             'subtitle' => 'nullable',
             'body' => 'required',
             'image_url' => 'nullable'
-        ]);
-
-        $article->update($data);
+        ]));
 
         return redirect()->route('articles.index');
     }
@@ -54,7 +51,6 @@ class ArticleController extends Controller
     public function destroy(Article $article)
     {
         $article->delete();
-
-        return redirect()->route('articles.index');
+        return back();
     }
 }
