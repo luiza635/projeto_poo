@@ -17,15 +17,15 @@ class CategoryController extends Controller
     public function store(Request $request)
     {
         Category::create($request->validate([
-            'name' => 'required'
+            'name' => 'required|string|max:100'
         ]));
 
-        return back();
+        return back()->with('success', 'Categoria adicionada com sucesso!');
     }
 
     public function destroy(Category $category)
     {
         $category->delete();
-        return back();
+        return back()->with('success', 'Categoria excluída com sucesso!');
     }
 }

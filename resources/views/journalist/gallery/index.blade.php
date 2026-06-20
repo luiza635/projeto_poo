@@ -4,17 +4,16 @@
 
     <div class="max-w-7xl mx-auto">
 
-        {{-- CABEÇALHO --}}
         <div class="flex items-center justify-between mb-8">
             <div>
-                <h2 class="text-2xl font-bold text-gray-800">Artigos</h2>
-                <p class="text-sm text-gray-500 mt-1">Gerencie as matérias publicadas e em rascunho</p>
+                <h2 class="text-2xl font-bold text-gray-800">Galeria</h2>
+                <p class="text-sm text-gray-500 mt-1">Gerencie as imagens da galeria</p>
             </div>
 
             <div class="flex items-center gap-3">
-                <a href="{{ route('articles.create') }}"
+                <a href="{{ route('gallery.create') }}"
                    class="bg-blue-900 hover:bg-blue-800 text-white text-sm font-semibold px-5 py-2.5 rounded-full shadow-sm transition flex items-center gap-2">
-                    <span class="text-lg leading-none">+</span> Novo artigo
+                    <span class="text-lg leading-none">+</span> Nova Imagem
                 </a>
 
                 <a href="{{ route('jornalista.dashboard') }}"
@@ -24,35 +23,31 @@
             </div>
         </div>
 
-        {{-- MENSAGEM DE SUCESSO --}}
         @if (session('success'))
             <div class="bg-green-100 border border-green-300 text-green-700 px-4 py-3 rounded-lg mb-6 text-sm font-medium">
                 {{ session('success') }}
             </div>
         @endif
 
-        {{-- LISTA VAZIA --}}
-        @if ($articles->isEmpty())
+        @if ($images->isEmpty())
             <div class="bg-white rounded-2xl shadow-sm border border-gray-100 py-20 text-center">
-                <p class="text-gray-400 text-lg mb-2">Nenhum artigo cadastrado ainda</p>
-                <p class="text-gray-400 text-sm mb-6">Comece criando sua primeira matéria</p>
-                <a href="{{ route('articles.create') }}"
+                <p class="text-gray-400 text-lg mb-2">Nenhuma imagem cadastrada ainda</p>
+                <p class="text-gray-400 text-sm mb-6">Comece adicionando sua primeira imagem</p>
+                <a href="{{ route('gallery.create') }}"
                    class="inline-block bg-blue-900 hover:bg-blue-800 text-white text-sm font-semibold px-5 py-2.5 rounded-full transition">
-                    + Novo artigo
+                    + Nova Imagem
                 </a>
             </div>
         @else
 
-            {{-- GRID DE CARDS --}}
             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
 
-                @foreach ($articles as $article)
+                @foreach ($images as $image)
                     <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden flex flex-col hover:shadow-md transition">
 
-                        {{-- IMAGEM DE CAPA --}}
                         <div class="h-44 bg-gray-100 overflow-hidden">
-                            @if ($article->image_url)
-                                <img src="{{ $article->image_url }}" alt="{{ $article->title }}"
+                            @if ($image->image_url)
+                                <img src="{{ $image->image_url }}" alt="{{ $image->title }}"
                                      class="w-full h-full object-cover">
                             @else
                                 <div class="w-full h-full flex items-center justify-center text-gray-300 text-sm">
@@ -63,49 +58,26 @@
 
                         <div class="p-5 flex flex-col flex-1">
 
-                            {{-- CATEGORIA + STATUS --}}
-                            <div class="flex items-center gap-2 mb-2">
-                                @if ($article->category)
-                                    <span class="text-[11px] font-semibold uppercase tracking-wide text-blue-900 bg-blue-50 px-2.5 py-1 rounded-full">
-                                        {{ $article->category->name }}
-                                    </span>
-                                @endif
-
-                                @if (isset($article->status))
-                                    @if ($article->status === 'published')
-                                        <span class="text-[11px] font-semibold uppercase tracking-wide text-green-700 bg-green-50 px-2.5 py-1 rounded-full">
-                                            Publicado
-                                        </span>
-                                    @else
-                                        <span class="text-[11px] font-semibold uppercase tracking-wide text-yellow-700 bg-yellow-50 px-2.5 py-1 rounded-full">
-                                            Rascunho
-                                        </span>
-                                    @endif
-                                @endif
-                            </div>
-
-                            {{-- TÍTULO --}}
                             <h3 class="font-bold text-gray-800 leading-snug mb-1.5 line-clamp-2">
-                                {{ $article->title }}
+                                {{ $image->title }}
                             </h3>
 
-                            {{-- SUBTÍTULO --}}
-                            @if ($article->subtitle)
+                            @if ($image->description)
                                 <p class="text-sm text-gray-500 line-clamp-2 mb-4">
-                                    {{ $article->subtitle }}
+                                    {{ $image->description }}
                                 </p>
                             @endif
 
                             <div class="mt-auto flex items-center gap-2 pt-3 border-t border-gray-50">
 
-                                <a href="{{ route('articles.edit', $article) }}"
+                                <a href="{{ route('gallery.edit', $image) }}"
                                    class="flex-1 text-center bg-gray-100 hover:bg-gray-200 text-gray-700 text-sm font-semibold py-2 rounded-lg transition">
                                     Editar
                                 </a>
 
-                                <form method="POST" action="{{ route('articles.destroy', $article) }}"
+                                <form method="POST" action="{{ route('gallery.destroy', $image) }}"
                                       class="flex-1 m-0"
-                                      onsubmit="return confirm('Tem certeza que deseja excluir esta matéria?');">
+                                      onsubmit="return confirm('Tem certeza que deseja excluir esta imagem?');">
                                     @csrf
                                     @method('DELETE')
                                     <button type="submit"

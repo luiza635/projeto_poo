@@ -9,10 +9,21 @@ use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\GalleryController;
 use App\Http\Controllers\AdminController;
 
+// ROTA HOME — necessária pois o layout usa route('home') no logo
 Route::get('/', function () {
     return Auth::check()
         ? redirect()->route('jornalista.dashboard')
         : redirect()->route('login');
+})->name('home');
+
+// ROTA TEMPORÁRIA DE DIAGNÓSTICO - REMOVER DEPOIS
+Route::get('/debug-auth', function () {
+    return [
+        'autenticado' => Auth::check(),
+        'usuario' => Auth::user(),
+        'session_id' => session()->getId(),
+        'guard_padrao' => config('auth.defaults.guard'),
+    ];
 });
 
 Route::middleware('auth')->group(function () {
@@ -31,3 +42,4 @@ Route::middleware('auth')->group(function () {
 });
 
 require __DIR__.'/auth.php';
+use App\Http\Controllers\ReaderController;

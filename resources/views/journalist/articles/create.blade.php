@@ -1,149 +1,147 @@
-<!DOCTYPE html>
-<html lang="pt-br">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login</title>
+@extends('layouts.app')
 
-    @vite(['resources/css/app.css', 'resources/js/app.js'])
-</head>
+@section('content')
 
-<body class="bg-gray-100 min-h-screen flex items-center justify-center">
+    <div class="max-w-4xl mx-auto">
 
-<div class="w-[1100px] bg-white rounded-2xl shadow-2xl flex overflow-hidden">
-
-    <!-- ESQUERDA -->
-    <div class="w-1/2 bg-gradient-to-br from-blue-700 to-blue-900 text-white p-14 flex flex-col justify-center relative">
-
-        <div class="absolute w-40 h-40 bg-white/10 rounded-full top-10 right-10"></div>
-        <div class="absolute w-60 h-60 bg-white/10 rounded-full bottom-[-40px] right-[-40px]"></div>
-
-        <h1 class="text-4xl font-bold mb-2">BEM-VINDO</h1>
-
-        <p class="text-blue-100 font-semibold mb-4">
-            PORTAL DE JORNALISMO ONLINE
-        </p>
-
-        <p class="text-sm text-blue-100 leading-relaxed">
-            Sistema moderno para jornalistas e leitores.
-            Gerencie matérias, categorias e galeria com facilidade.
-        </p>
-
-    </div>
-
-    <!-- DIREITA -->
-    <div class="w-1/2 p-12 flex flex-col justify-center">
-
-        <div class="flex items-center gap-3 mb-4">
-            <img src="https://laravel.com/img/logomark.min.svg" class="w-12 h-12" alt="Laravel">
-
-            <h2 class="text-4xl font-bold text-gray-800">
-                Entrar
-            </h2>
+        <div class="flex items-center justify-between mb-6">
+            <h2 class="text-2xl font-bold text-gray-800">Nova Matéria</h2>
+            <a href="{{ route('articles.index') }}"
+               class="bg-gray-100 hover:bg-gray-200 text-gray-700 text-sm font-semibold px-4 py-2 rounded-lg shadow-sm transition">
+                Voltar
+            </a>
         </div>
 
-        <p class="text-sm text-gray-500 mb-6">
-            Acesse como usuário ou jornalista
-        </p>
-
-        <!-- TOGGLE (APENAS VISUAL — NÃO AFETA LOGIN) -->
-        <div class="flex bg-gray-100 p-1 rounded-lg mb-6">
-
-            <button type="button"
-                    onclick="setRole('user')"
-                    id="btn-user"
-                    class="flex-1 py-2 rounded-md text-sm bg-blue-600 text-white transition">
-                Usuário
-            </button>
-
-            <button type="button"
-                    onclick="setRole('journalist')"
-                    id="btn-journalist"
-                    class="flex-1 py-2 rounded-md text-sm text-gray-600 transition">
-                Jornalista
-            </button>
-
-        </div>
-
-        <!-- ERROS -->
+        {{-- ERROS DE VALIDAÇÃO --}}
         @if ($errors->any())
-            <div class="mb-4 bg-red-100 text-red-600 p-3 rounded text-sm">
-                {{ $errors->first() }}
+            <div class="bg-red-100 border border-red-300 text-red-700 px-4 py-3 rounded-lg mb-6">
+                <p class="font-semibold mb-1">Corrija os campos abaixo:</p>
+                <ul class="list-disc list-inside text-sm">
+                    @foreach ($errors->all() as $error)
+                        <li>{{ $error }}</li>
+                    @endforeach
+                </ul>
             </div>
         @endif
 
-        <!-- FORM -->
-        <form method="POST" action="{{ route('login') }}" class="space-y-4">
-
+        <form method="POST" action="{{ route('articles.store') }}" enctype="multipart/form-data"
+              class="bg-white shadow rounded-xl p-6 space-y-6">
             @csrf
 
-            <!-- IMPORTANTE: role NÃO interfere no Auth -->
-            <input type="hidden" name="role" id="role" value="user">
+            {{-- TÍTULO --}}
+            <div>
+                <label for="title" class="block text-sm font-semibold text-gray-700 mb-1">
+                    Título <span class="text-red-500">*</span>
+                </label>
+                <input type="text" name="title" id="title" value="{{ old('title') }}"
+                       maxlength="150" required
+                       class="w-full border border-gray-300 rounded-lg px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-900"
+                       placeholder="Digite o título da matéria">
+            </div>
 
-            <input type="email"
-                   name="email"
-                   placeholder="E-mail"
-                   value="{{ old('email') }}"
-                   required
-                   class="w-full border rounded-lg p-3 focus:ring-2 focus:ring-blue-500 outline-none">
+            {{-- SUBTÍTULO / CHAMADA --}}
+            <div>
+                <label for="subtitle" class="block text-sm font-semibold text-gray-700 mb-1">
+                    Subtítulo / Chamada
+                </label>
+                <textarea name="subtitle" id="subtitle" rows="2" maxlength="250"
+                          class="w-full border border-gray-300 rounded-lg px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-900"
+                          placeholder="Resumo curto que aparece na listagem">{{ old('subtitle') }}</textarea>
+            </div>
 
-            <input type="password"
-                   name="password"
-                   placeholder="Senha"
-                   required
-                   class="w-full border rounded-lg p-3 focus:ring-2 focus:ring-blue-500 outline-none">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
 
-            <button class="w-full bg-blue-700 hover:bg-blue-800 text-white p-3 rounded-lg font-semibold transition">
-                ENTRAR
-            </button>
+                {{-- CATEGORIA --}}
+                <div>
+                    <label for="category_id" class="block text-sm font-semibold text-gray-700 mb-1">
+                        Categoria <span class="text-red-500">*</span>
+                    </label>
+                    <select name="category_id" id="category_id" required
+                            class="w-full border border-gray-300 rounded-lg px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-900">
+                        <option value="">Selecione...</option>
+                        @foreach ($categories as $category)
+                            <option value="{{ $category->id }}" @selected(old('category_id') == $category->id)>
+                                {{ $category->name }}
+                            </option>
+                        @endforeach
+                    </select>
+                </div>
+
+                {{-- STATUS --}}
+                <div>
+                    <label for="status" class="block text-sm font-semibold text-gray-700 mb-1">
+                        Status <span class="text-red-500">*</span>
+                    </label>
+                    <select name="status" id="status" required
+                            class="w-full border border-gray-300 rounded-lg px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-900">
+                        <option value="draft" @selected(old('status') == 'draft')>Rascunho</option>
+                        <option value="published" @selected(old('status') == 'published')>Publicado</option>
+                    </select>
+                </div>
+
+            </div>
+
+            {{-- TAGS --}}
+            <div>
+                <label for="tags" class="block text-sm font-semibold text-gray-700 mb-1">
+                    Tags
+                </label>
+                <input type="text" name="tags" id="tags" value="{{ old('tags') }}"
+                       class="w-full border border-gray-300 rounded-lg px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-900"
+                       placeholder="Separe por vírgula. Ex: eleições, economia, brasil">
+            </div>
+
+            {{-- IMAGEM DE CAPA --}}
+            <div>
+                <label for="image" class="block text-sm font-semibold text-gray-700 mb-1">
+                    Imagem de Capa
+                </label>
+                <input type="file" name="image" id="image" accept="image/*"
+                       onchange="previewImagem(event)"
+                       class="w-full text-sm text-gray-600 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:bg-blue-900 file:text-white file:text-sm file:font-semibold hover:file:bg-blue-800">
+
+                <img id="preview" src="#" alt="Pré-visualização"
+                     class="hidden mt-3 w-full max-h-64 object-cover rounded-lg border border-gray-200">
+            </div>
+
+            {{-- CONTEÚDO --}}
+            <div>
+                <label for="body" class="block text-sm font-semibold text-gray-700 mb-1">
+                    Conteúdo <span class="text-red-500">*</span>
+                </label>
+                <textarea name="body" id="body" rows="14" required
+                          class="w-full border border-gray-300 rounded-lg px-4 py-2 text-sm leading-relaxed focus:outline-none focus:ring-2 focus:ring-blue-900"
+                          placeholder="Escreva o conteúdo completo da matéria...">{{ old('body') }}</textarea>
+            </div>
+
+            {{-- AÇÕES --}}
+            <div class="flex items-center justify-end gap-3 pt-4 border-t border-gray-100">
+                <a href="{{ route('articles.index') }}"
+                   class="px-5 py-2 rounded-full text-sm font-semibold text-gray-600 hover:bg-gray-100 transition">
+                    Cancelar
+                </a>
+                <button type="submit"
+                        class="px-6 py-2 rounded-full text-sm font-semibold bg-blue-900 hover:bg-blue-800 text-white transition">
+                    Publicar Matéria
+                </button>
+            </div>
 
         </form>
 
-        <!-- LINKS -->
-        <div class="mt-5 text-center space-y-3">
-
-            <a href="{{ route('password.request') }}"
-               class="block text-sm text-gray-500 hover:text-blue-600">
-                Esqueceu sua senha?
-            </a>
-
-            <p class="text-sm text-gray-600">
-                Não tem conta?
-                <a href="{{ route('register') }}" class="text-blue-600 font-semibold hover:underline">
-                    Criar conta
-                </a>
-            </p>
-
-        </div>
-
     </div>
 
-</div>
+    <script>
+        function previewImagem(event) {
+            const preview = document.getElementById('preview');
+            const file = event.target.files[0];
 
-<!-- SCRIPT (SÓ VISUAL, NÃO AFETA LOGIN) -->
-<script>
-function setRole(role) {
+            if (file) {
+                preview.src = URL.createObjectURL(file);
+                preview.classList.remove('hidden');
+            } else {
+                preview.classList.add('hidden');
+            }
+        }
+    </script>
 
-    document.getElementById('role').value = role;
-
-    const userBtn = document.getElementById('btn-user');
-    const journalistBtn = document.getElementById('btn-journalist');
-
-    if (role === 'user') {
-        userBtn.classList.add('bg-blue-600','text-white');
-        userBtn.classList.remove('text-gray-600');
-
-        journalistBtn.classList.remove('bg-blue-600','text-white');
-        journalistBtn.classList.add('text-gray-600');
-    } else {
-        journalistBtn.classList.add('bg-blue-600','text-white');
-        journalistBtn.classList.remove('text-gray-600');
-
-        userBtn.classList.remove('bg-blue-600','text-white');
-        userBtn.classList.add('text-gray-600');
-    }
-}
-</script>
-
-</body>
-</html>
+@endsection
