@@ -121,16 +121,7 @@
             </ol>
         </div>
 
-        <div class="bg-white rounded-2xl shadow p-5">
-            <h3 class="font-bold text-blue-900 mb-4">TEMPO — FORTALEZA</h3>
-            <div class="flex justify-between items-center">
-                <div>
-                    <p class="text-5xl font-extrabold text-blue-900">29°</p>
-                    <p class="text-gray-500">Ensolarado</p>
-                </div>
-                <img src="https://cdn-icons-png.flaticon.com/512/869/869869.png" class="w-14 h-14">
-            </div>
-        </div>
+        @include('partials.weather-card')
 
         <div class="bg-blue-900 text-white rounded-2xl shadow p-4">
             <h3 class="font-bold mb-4">Ações rápidas</h3>

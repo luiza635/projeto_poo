@@ -10,7 +10,7 @@
                 <p class="text-sm text-gray-500 mt-1">Gerencie as categorias usadas nas matérias</p>
             </div>
 
-            <a href="{{ route('articles.index') }}"
+            <a href="{{ route('jornalista.dashboard') }}"
                class="bg-gray-100 hover:bg-gray-200 text-gray-700 text-sm font-semibold px-4 py-2 rounded-lg shadow-sm transition">
                 Voltar
             </a>
@@ -65,19 +65,52 @@
             @else
                 <ul class="divide-y divide-gray-100">
                     @foreach ($categories as $category)
-                        <li class="flex items-center justify-between px-6 py-4">
+                        <li class="px-6 py-4" x-data="{ editing: false }">
 
-                            <span class="text-sm font-semibold text-gray-700">
-                                {{ $category->name }}
-                            </span>
+                            <div class="flex items-center justify-between" x-show="!editing">
 
-                            <form method="POST" action="{{ route('categories.destroy', $category) }}"
-                                  onsubmit="return confirm('Tem certeza que deseja excluir esta categoria?');">
+                                <span class="text-sm font-semibold text-gray-700">
+                                    {{ $category->name }}
+                                </span>
+
+                                <div class="flex items-center gap-4">
+                                    <button type="button"
+                                            @click="editing = true"
+                                            class="text-blue-700 hover:text-blue-900 text-sm font-semibold transition">
+                                        Editar
+                                    </button>
+
+                                    <form method="POST" action="{{ route('categories.destroy', $category) }}"
+                                          onsubmit="return confirm('Tem certeza que deseja excluir esta categoria?');">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="submit"
+                                                class="text-red-500 hover:text-red-700 text-sm font-semibold transition">
+                                            Excluir
+                                        </button>
+                                    </form>
+                                </div>
+
+                            </div>
+
+                            <form method="POST" action="{{ route('categories.update', $category) }}"
+                                  class="flex items-center gap-3" x-show="editing" x-cloak>
                                 @csrf
-                                @method('DELETE')
+                                @method('PUT')
+
+                                <input type="text" name="name" value="{{ $category->name }}"
+                                       required maxlength="100"
+                                       class="flex-1 border border-gray-300 rounded-lg px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-900">
+
                                 <button type="submit"
-                                        class="text-red-500 hover:text-red-700 text-sm font-semibold transition">
-                                    Excluir
+                                        class="bg-blue-900 hover:bg-blue-800 text-white text-sm font-semibold px-4 py-2 rounded-lg transition shrink-0">
+                                    Salvar
+                                </button>
+
+                                <button type="button"
+                                        @click="editing = false"
+                                        class="text-gray-500 hover:text-gray-700 text-sm font-semibold px-2 transition shrink-0">
+                                    Cancelar
                                 </button>
                             </form>
 

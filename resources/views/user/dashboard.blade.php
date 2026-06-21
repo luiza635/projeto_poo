@@ -34,7 +34,7 @@
 
             <h2 class="text-lg font-bold text-gray-800">Últimas notícias</h2>
 
-            @forelse($articles->skip(1) as $item)
+            @forelse($articles->reject(fn($a) => $destaque && $a->id === $destaque->id) as $item)
             <a href="{{ route('user.article.show', $item) }}"
                class="bg-white rounded-xl shadow p-4 flex gap-4 hover:shadow-lg transition">
 
@@ -75,16 +75,7 @@
             </ol>
         </div>
 
-        <div class="bg-white rounded-2xl shadow p-5">
-            <h3 class="font-bold text-blue-900 mb-4">TEMPO — BRASÍLIA</h3>
-            <div class="flex justify-between items-center">
-                <div>
-                    <p class="text-5xl font-extrabold text-blue-900">24°</p>
-                    <p class="text-gray-500">Parcialmente nublado</p>
-                </div>
-                <img src="https://cdn-icons-png.flaticon.com/512/3920/3920809.png" class="w-14 h-14">
-            </div>
-        </div>
+        @include('partials.weather-card')
 
         <!-- CARD DE GALERIA (substitui Ações Rápidas) -->
         <div class="bg-white rounded-2xl shadow p-5">

@@ -23,6 +23,15 @@ class CategoryController extends Controller
         return back()->with('success', 'Categoria adicionada com sucesso!');
     }
 
+    public function update(Request $request, Category $category)
+    {
+        $category->update($request->validate([
+            'name' => 'required|string|max:100'
+        ]));
+
+        return back()->with('success', 'Categoria atualizada com sucesso!');
+    }
+
     public function destroy(Category $category)
     {
         $category->delete();

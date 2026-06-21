@@ -4,6 +4,13 @@
 
 <div class="max-w-3xl mx-auto bg-white rounded-2xl shadow overflow-hidden">
 
+    <div class="p-4 text-right">
+        <a href="{{ route('user.dashboard') }}"
+           class="inline-block bg-gray-200 hover:bg-gray-300 text-gray-700 px-5 py-2 rounded-lg font-semibold text-sm transition">
+            Voltar
+        </a>
+    </div>
+
     @if($article->image_url)
     <img src="{{ $article->image_url }}" class="w-full h-96 object-cover">
     @endif
@@ -27,11 +34,6 @@
         <div class="prose max-w-none mt-6 text-gray-800 leading-relaxed">
             {!! nl2br(e($article->body)) !!}
         </div>
-
-        <a href="{{ route('user.dashboard') }}"
-           class="inline-block mt-8 bg-gray-200 hover:bg-gray-300 text-gray-700 px-5 py-2 rounded-lg font-semibold text-sm transition">
-            ← Voltar
-        </a>
 
     </div>
 
