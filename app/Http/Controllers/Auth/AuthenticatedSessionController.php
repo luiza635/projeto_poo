@@ -28,16 +28,21 @@ class AuthenticatedSessionController extends Controller
 
         $request->session()->regenerate();
 
-        return redirect('/jornalista');
+        $user = Auth::user();
+
+        // Redireciona conforme o perfil real do usuário no banco
+        if (in_array($user->role, ['admin', 'jornalista'])) {
+            return redirect()->route('jornalista.dashboard');
+        }
+
+        return redirect()->route('user.dashboard');
     }
 
     public function destroy(Request $request)
     {
         Auth::logout();
-
         $request->session()->invalidate();
         $request->session()->regenerateToken();
-
         return redirect('/login');
     }
 }

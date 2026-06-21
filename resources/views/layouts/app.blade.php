@@ -14,8 +14,10 @@
 
     <div class="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
 
+        <!-- LOGO -->
         <h1 class="text-3xl font-bold shrink-0">g2</h1>
 
+        <!-- MENU -->
         <nav class="hidden md:flex items-center gap-7 text-sm font-semibold">
             <a href="#" class="hover:text-blue-200 transition">Início</a>
             <a href="#" class="hover:text-blue-200 transition">Brasil</a>
@@ -27,22 +29,37 @@
             <a href="#" class="hover:text-blue-200 transition">Saúde</a>
         </nav>
 
+        <!-- USUÁRIO + SAIR -->
         <div class="flex items-center gap-3 shrink-0">
 
-            <div class="flex items-center gap-1.5 bg-white/10 px-3 h-9 rounded-full">
-                <div class="w-5 h-5 rounded-full bg-white/20 flex items-center justify-center text-[9px] shrink-0">
+            <!-- USUÁRIO -->
+            <div class="flex items-center gap-2.5 bg-white/10 px-4 h-11 rounded-full">
+                <div class="w-7 h-7 rounded-full bg-white/20 flex items-center justify-center text-xs font-bold shrink-0">
                     {{ substr(auth()->user()->name ?? 'U', 0, 1) }}
                 </div>
-                <div class="leading-none">
-                    <div class="font-semibold text-[11px]">{{ auth()->user()->name ?? 'Usuário' }}</div>
-                    <div class="text-[9px] opacity-70">Jornalista</div>
+                <div class="leading-tight">
+                    <div class="font-semibold text-sm">{{ auth()->user()->name ?? 'Usuário' }}</div>
+                    <div class="text-xs opacity-70">
+                        @php
+                            $role = auth()->user()->role ?? '';
+                        @endphp
+
+                        @if($role === 'admin')
+                            Admin
+                        @elseif($role === 'jornalista')
+                            Jornalista
+                        @else
+                            Leitor
+                        @endif
+                    </div>
                 </div>
             </div>
 
+            <!-- BOTÃO SAIR -->
             <form method="POST" action="{{ route('logout') }}" class="m-0">
                 @csrf
                 <button type="submit"
-                    class="h-9 flex items-center bg-red-500 hover:bg-red-600 text-white text-sm font-semibold px-4 rounded-full transition">
+                    class="h-11 flex items-center bg-red-500 hover:bg-red-600 text-white text-sm font-semibold px-5 rounded-full transition">
                     Sair
                 </button>
             </form>

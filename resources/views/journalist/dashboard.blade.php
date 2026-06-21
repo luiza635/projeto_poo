@@ -2,100 +2,133 @@
 
 @section('content')
 
-@php
-$demo = collect([
-    "Economia brasileira cresce acima do esperado",
-    "Tecnologia avança com novos sistemas de IA",
-    "Brasil vence clássico internacional",
-    "Educação digital transforma escolas",
-    "Mercado financeiro reage positivamente",
-    "Saúde pública recebe novos investimentos",
-    "Infraestrutura recebe pacote de R$ 40 bilhões",
-    "Novo sistema de transporte urbano é aprovado",
-    "Clima muda e alerta é emitido em regiões do país",
-]);
-@endphp
-
 <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
 
+    <!-- COLUNA PRINCIPAL -->
     <div class="lg:col-span-2 space-y-6">
 
+        @if($destaque)
+        <!-- NOTÍCIA PRINCIPAL -->
         <div class="bg-white rounded-2xl shadow overflow-hidden">
 
-            <img src="https://picsum.photos/900/400" class="w-full h-80 object-cover">
+            <img src="{{ $destaque->image_url ?? 'https://picsum.photos/900/400' }}"
+                 class="w-full h-80 object-cover">
 
             <div class="p-5">
 
-                <span class="text-red-600 text-xs font-bold">URGENTE</span>
+                @if($destaque->is_featured)
+                    <span class="text-red-600 text-xs font-bold">URGENTE</span>
+                @endif
 
                 <h2 class="text-2xl font-bold mt-2 text-blue-900">
-                    Governo anuncia novo pacote econômico
+                    {{ $destaque->title }}
                 </h2>
 
                 <p class="text-gray-600 mt-2">
-                    Medidas visam crescimento sustentável e geração de empregos.
+                    {{ $destaque->subtitle }}
                 </p>
 
                 <div class="flex gap-2 mt-4">
-                    <a href="#" class="bg-blue-600 text-white px-3 py-1 rounded text-sm">Editar</a>
-                    <button class="bg-blue-800 text-white px-3 py-1 rounded text-sm">Excluir</button>
+
+                    <a href="{{ route('articles.edit', $destaque) }}"
+                       class="bg-blue-600 hover:bg-blue-700 text-white px-3 py-1 rounded text-sm transition">
+                        Editar
+                    </a>
+
+                    <form action="{{ route('articles.destroy', $destaque) }}" method="POST"
+                          onsubmit="return confirm('Tem certeza que deseja excluir esta matéria?');">
+                        @csrf
+                        @method('DELETE')
+                        <button type="submit"
+                                class="bg-blue-800 hover:bg-blue-900 text-white px-3 py-1 rounded text-sm transition">
+                            Excluir
+                        </button>
+                    </form>
+
                 </div>
 
             </div>
 
         </div>
+        @endif
 
+        <!-- FEED DE NOTÍCIAS -->
         <div class="space-y-4">
 
             <h2 class="text-lg font-bold text-gray-800">Últimas notícias</h2>
 
-            @foreach($demo as $i => $item)
+            @forelse($articles->reject(fn($a) => $destaque && $a->id === $destaque->id) as $item)
+
             <div class="bg-white rounded-xl shadow p-4 flex gap-4">
 
-                <img src="https://picsum.photos/200/120?random={{ $i }}"
+                <img src="{{ $item->image_url ?? 'https://picsum.photos/200/120?random=' . $item->id }}"
                      class="w-28 h-20 object-cover rounded-lg">
 
                 <div class="flex-1">
-                    <h3 class="font-bold text-blue-900">{{ $item }}</h3>
-                    <p class="text-sm text-gray-600 mt-1">Clique para ler mais detalhes desta notícia.</p>
+
+                    <h3 class="font-bold text-blue-900">
+                        {{ $item->title }}
+                    </h3>
+
+                    <p class="text-sm text-gray-600 mt-1">
+                        {{ Str::limit($item->subtitle ?? $item->body, 90) }}
+                    </p>
 
                     <div class="flex gap-2 mt-3">
-                        <button class="bg-blue-600 text-white px-3 py-1 rounded text-xs">Editar</button>
-                        <button class="bg-blue-800 text-white px-3 py-1 rounded text-xs">Excluir</button>
+
+                        <a href="{{ route('articles.edit', $item) }}"
+                           class="bg-blue-600 hover:bg-blue-700 text-white px-3 py-1 rounded text-xs transition">
+                            Editar
+                        </a>
+
+                        <form action="{{ route('articles.destroy', $item) }}" method="POST"
+                              onsubmit="return confirm('Tem certeza que deseja excluir esta matéria?');">
+                            @csrf
+                            @method('DELETE')
+                            <button type="submit"
+                                    class="bg-blue-800 hover:bg-blue-900 text-white px-3 py-1 rounded text-xs transition">
+                                Excluir
+                            </button>
+                        </form>
+
                     </div>
+
                 </div>
 
             </div>
-            @endforeach
+
+            @empty
+            <p class="text-gray-500 text-sm">Nenhuma matéria cadastrada ainda.</p>
+            @endforelse
 
         </div>
 
     </div>
 
+    <!-- SIDEBAR -->
     <div class="space-y-4">
 
         <div class="bg-white rounded-2xl shadow overflow-hidden">
-            <div class="bg-blue-700 text-white px-4 py-3 font-bold flex items-center gap-2">
-                <img src="https://cdn-icons-png.flaticon.com/512/1270/1270341.png" class="w-5 h-5">
+            <div class="bg-blue-700 text-white px-4 py-3 font-bold">
                 Mais lidas agora
             </div>
             <ol class="text-sm">
-                <li class="px-4 py-3 border-b">1. Reforma tributária aprovada</li>
-                <li class="px-4 py-3 border-b">2. Vacina 94% eficaz</li>
-                <li class="px-4 py-3 border-b">3. Brasil vence Argentina</li>
-                <li class="px-4 py-3 border-b">4. Meta lança IA</li>
-                <li class="px-4 py-3">5. Selic mantida</li>
+                @forelse($articles->sortByDesc('views')->take(5) as $top)
+                    <li class="px-4 py-3 border-b last:border-0">{{ $top->title }}</li>
+                @empty
+                    <li class="px-4 py-3 text-gray-500">Sem dados ainda.</li>
+                @endforelse
             </ol>
         </div>
 
         <div class="bg-white rounded-2xl shadow p-5">
-            <h3 class="font-bold text-blue-900 mb-4">TEMPO — BRASÍLIA</h3>
+            <h3 class="font-bold text-blue-900 mb-4">TEMPO — FORTALEZA</h3>
             <div class="flex justify-between items-center">
                 <div>
-                    <p class="text-5xl font-extrabold text-blue-900">24°</p>
-                    <p class="text-gray-500">Parcialmente nublado</p>
+                    <p class="text-5xl font-extrabold text-blue-900">29°</p>
+                    <p class="text-gray-500">Ensolarado</p>
                 </div>
-                <img src="https://cdn-icons-png.flaticon.com/512/3920/3920809.png" class="w-14 h-14">
+                <img src="https://cdn-icons-png.flaticon.com/512/869/869869.png" class="w-14 h-14">
             </div>
         </div>
 

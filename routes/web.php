@@ -8,12 +8,19 @@ use App\Http\Controllers\ArticleController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\GalleryController;
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\UserDashboardController;
 
-// ROTA HOME — necessária pois o layout usa route('home') no logo
+// ROTA HOME
 Route::get('/', function () {
-    return Auth::check()
+    if (!Auth::check()) {
+        return redirect()->route('login');
+    }
+
+    $user = Auth::user();
+
+    return in_array($user->role, ['admin', 'jornalista'])
         ? redirect()->route('jornalista.dashboard')
-        : redirect()->route('login');
+        : redirect()->route('user.dashboard');
 })->name('home');
 
 // ROTA TEMPORÁRIA DE DIAGNÓSTICO - REMOVER DEPOIS
@@ -26,7 +33,8 @@ Route::get('/debug-auth', function () {
     ];
 });
 
-Route::middleware('auth')->group(function () {
+// ROTAS SÓ PARA JORNALISTA/ADMIN (criar, editar, excluir)
+Route::middleware(['auth', 'journalist'])->group(function () {
 
     Route::get('/jornalista', [JournalistController::class, 'dashboard'])
         ->name('jornalista.dashboard');
@@ -35,11 +43,20 @@ Route::middleware('auth')->group(function () {
     Route::resource('categories', CategoryController::class);
     Route::resource('gallery', GalleryController::class);
 
-    // ADMIN
     Route::get('/admin', [AdminController::class, 'index'])
         ->name('admin.dashboard');
 
 });
 
+// ROTAS DO USUÁRIO COMUM (somente leitura)
+Route::middleware('auth')->group(function () {
+
+    Route::get('/painel', [UserDashboardController::class, 'index'])
+        ->name('user.dashboard');
+
+    Route::get('/painel/{article}', [UserDashboardController::class, 'show'])
+        ->name('user.article.show');
+
+});
+
 require __DIR__.'/auth.php';
-use App\Http\Controllers\ReaderController;

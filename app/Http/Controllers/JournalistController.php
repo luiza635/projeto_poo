@@ -13,11 +13,13 @@ class JournalistController extends Controller
         $articles = Article::latest()->get();
         $categories = Category::all();
         $gallery = Gallery::latest()->get();
+        $destaque = $articles->where('is_featured', true)->first() ?? $articles->first();
 
         return view('journalist.dashboard', compact(
             'articles',
             'categories',
-            'gallery'
+            'gallery',
+            'destaque'
         ));
     }
 }
