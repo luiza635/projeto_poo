@@ -23,16 +23,6 @@ Route::get('/', function () {
         : redirect()->route('user.dashboard');
 })->name('home');
 
-// ROTA TEMPORÁRIA DE DIAGNÓSTICO - REMOVER DEPOIS
-Route::get('/debug-auth', function () {
-    return [
-        'autenticado' => Auth::check(),
-        'usuario' => Auth::user(),
-        'session_id' => session()->getId(),
-        'guard_padrao' => config('auth.defaults.guard'),
-    ];
-});
-
 // ROTAS SÓ PARA JORNALISTA/ADMIN (criar, editar, excluir)
 Route::middleware(['auth', 'journalist'])->group(function () {
 

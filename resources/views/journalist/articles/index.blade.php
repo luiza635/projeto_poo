@@ -7,14 +7,14 @@
         {{-- CABEÇALHO --}}
         <div class="flex items-center justify-between mb-8">
             <div>
-                <h2 class="text-2xl font-bold text-gray-800">Artigos</h2>
+                <h2 class="text-2xl font-bold text-gray-800">Matérias</h2>
                 <p class="text-sm text-gray-500 mt-1">Gerencie as matérias publicadas e em rascunho</p>
             </div>
 
             <div class="flex items-center gap-3">
                 <a href="{{ route('articles.create') }}"
                    class="bg-blue-900 hover:bg-blue-800 text-white text-sm font-semibold px-5 py-2.5 rounded-full shadow-sm transition flex items-center gap-2">
-                    <span class="text-lg leading-none">+</span> Novo artigo
+                    <span class="text-lg leading-none">+</span> Nova matéria
                 </a>
 
                 <a href="{{ route('jornalista.dashboard') }}"
@@ -34,11 +34,11 @@
         {{-- LISTA VAZIA --}}
         @if ($articles->isEmpty())
             <div class="bg-white rounded-2xl shadow-sm border border-gray-100 py-20 text-center">
-                <p class="text-gray-400 text-lg mb-2">Nenhum artigo cadastrado ainda</p>
+                <p class="text-gray-400 text-lg mb-2">Nenhuma matéria cadastrada ainda</p>
                 <p class="text-gray-400 text-sm mb-6">Comece criando sua primeira matéria</p>
                 <a href="{{ route('articles.create') }}"
                    class="inline-block bg-blue-900 hover:bg-blue-800 text-white text-sm font-semibold px-5 py-2.5 rounded-full transition">
-                    + Novo artigo
+                    + Nova matéria
                 </a>
             </div>
         @else
