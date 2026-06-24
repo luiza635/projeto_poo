@@ -1,147 +1,88 @@
 @extends('layouts.app')
 
 @section('content')
+<div style="background:#f1f3f6; padding:40px 16px; min-height:100vh;">
+    <div style="max-width:700px; margin:0 auto;">
 
-    <div class="max-w-4xl mx-auto">
-
-        <div class="flex items-center justify-between mb-6">
-            <h2 class="text-2xl font-bold text-gray-800">Nova Matéria</h2>
-            <a href="{{ route('articles.index') }}"
-               class="bg-gray-100 hover:bg-gray-200 text-gray-700 text-sm font-semibold px-4 py-2 rounded-lg shadow-sm transition">
-                Voltar
-            </a>
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:24px;">
+            <h1 style="color:#1a237e; font-size:1.4rem; font-weight:700; margin:0;">Criar Nova Matéria</h1>
+            <a href="{{ route('articles.index') }}" style="color:#555; text-decoration:none; font-size:0.875rem;">Voltar</a>
         </div>
 
-        {{-- ERROS DE VALIDAÇÃO --}}
-        @if ($errors->any())
-            <div class="bg-red-100 border border-red-300 text-red-700 px-4 py-3 rounded-lg mb-6">
-                <p class="font-semibold mb-1">Corrija os campos abaixo:</p>
-                <ul class="list-disc list-inside text-sm">
-                    @foreach ($errors->all() as $error)
+        <div style="background:#fff; border-radius:16px; padding:36px; border:0.5px solid #e0e0e0;">
+
+            @if($errors->any())
+            <div style="background:#fff0f0; border-left:4px solid #e53935; border-radius:8px; padding:14px 18px; margin-bottom:24px;">
+                <ul style="margin:0; padding-left:18px; color:#c62828; font-size:0.875rem;">
+                    @foreach($errors->all() as $error)
                         <li>{{ $error }}</li>
                     @endforeach
                 </ul>
             </div>
-        @endif
+            @endif
 
-        <form method="POST" action="{{ route('articles.store') }}" enctype="multipart/form-data"
-              class="bg-white shadow rounded-xl p-6 space-y-6">
-            @csrf
+            <form action="{{ route('articles.store') }}" method="POST" enctype="multipart/form-data">
+                @csrf
 
-            {{-- TÍTULO --}}
-            <div>
-                <label for="title" class="block text-sm font-semibold text-gray-700 mb-1">
-                    Título <span class="text-red-500">*</span>
-                </label>
-                <input type="text" name="title" id="title" value="{{ old('title') }}"
-                       maxlength="150" required
-                       class="w-full border border-gray-300 rounded-lg px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-900"
-                       placeholder="Digite o título da matéria">
-            </div>
-
-            {{-- SUBTÍTULO / CHAMADA --}}
-            <div>
-                <label for="subtitle" class="block text-sm font-semibold text-gray-700 mb-1">
-                    Subtítulo / Chamada
-                </label>
-                <textarea name="subtitle" id="subtitle" rows="2" maxlength="250"
-                          class="w-full border border-gray-300 rounded-lg px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-900"
-                          placeholder="Resumo curto que aparece na listagem">{{ old('subtitle') }}</textarea>
-            </div>
-
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-
-                {{-- CATEGORIA --}}
-                <div>
-                    <label for="category_id" class="block text-sm font-semibold text-gray-700 mb-1">
-                        Categoria <span class="text-red-500">*</span>
-                    </label>
-                    <select name="category_id" id="category_id" required
-                            class="w-full border border-gray-300 rounded-lg px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-900">
-                        <option value="">Selecione...</option>
-                        @foreach ($categories as $category)
-                            <option value="{{ $category->id }}" @selected(old('category_id') == $category->id)>
-                                {{ $category->name }}
-                            </option>
-                        @endforeach
-                    </select>
+                <div style="margin-bottom:20px;">
+                    <label style="display:block; font-size:0.85rem; font-weight:600; color:#333; margin-bottom:8px;">Título <span style="color:#e53935;">*</span></label>
+                    <input type="text" name="title" value="{{ old('title') }}" placeholder="Título da matéria"
+                        style="width:100%; padding:13px 16px; border:1.5px solid #e0e0e0; border-radius:10px; font-size:0.95rem; box-sizing:border-box; outline:none; color:#333;"
+                        onfocus="this.style.borderColor='#1a237e'" onblur="this.style.borderColor='#e0e0e0'">
                 </div>
 
-                {{-- STATUS --}}
-                <div>
-                    <label for="status" class="block text-sm font-semibold text-gray-700 mb-1">
-                        Status <span class="text-red-500">*</span>
-                    </label>
-                    <select name="status" id="status" required
-                            class="w-full border border-gray-300 rounded-lg px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-900">
-                        <option value="draft" @selected(old('status') == 'draft')>Rascunho</option>
-                        <option value="published" @selected(old('status') == 'published')>Publicado</option>
-                    </select>
+                <div style="margin-bottom:20px;">
+                    <label style="display:block; font-size:0.85rem; font-weight:600; color:#333; margin-bottom:8px;">Subtítulo</label>
+                    <input type="text" name="subtitle" value="{{ old('subtitle') }}" placeholder="Subtítulo da matéria"
+                        style="width:100%; padding:13px 16px; border:1.5px solid #e0e0e0; border-radius:10px; font-size:0.95rem; box-sizing:border-box; outline:none; color:#333;"
+                        onfocus="this.style.borderColor='#1a237e'" onblur="this.style.borderColor='#e0e0e0'">
                 </div>
 
-            </div>
+                <div style="margin-bottom:20px;">
+                    <label style="display:block; font-size:0.85rem; font-weight:600; color:#333; margin-bottom:8px;">Conteúdo <span style="color:#e53935;">*</span></label>
+                    <textarea name="body" placeholder="Conteúdo da matéria" rows="6"
+                        style="width:100%; padding:13px 16px; border:1.5px solid #e0e0e0; border-radius:10px; font-size:0.95rem; box-sizing:border-box; outline:none; resize:vertical; line-height:1.6; color:#333;"
+                        onfocus="this.style.borderColor='#1a237e'" onblur="this.style.borderColor='#e0e0e0'">{{ old('body') }}</textarea>
+                </div>
 
-            {{-- TAGS --}}
-            <div>
-                <label for="tags" class="block text-sm font-semibold text-gray-700 mb-1">
-                    Tags
-                </label>
-                <input type="text" name="tags" id="tags" value="{{ old('tags') }}"
-                       class="w-full border border-gray-300 rounded-lg px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-900"
-                       placeholder="Separe por vírgula. Ex: eleições, economia, brasil">
-            </div>
+                <div style="margin-bottom:20px;">
+                    <label style="display:block; font-size:0.85rem; font-weight:600; color:#333; margin-bottom:8px;">Imagem <span style="color:#e53935;">*</span></label>
+                    <div style="display:flex; align-items:center; gap:16px;">
+                        <label for="image-input" style="background:#1a237e; color:#fff; padding:10px 20px; border-radius:8px; font-size:0.875rem; font-weight:600; cursor:pointer; white-space:nowrap;">Escolher arquivo</label>
+                        <span style="font-size:0.875rem; color:#888;" id="file-label">Nenhum arquivo escolhido</span>
+                        <input id="image-input" type="file" name="image" accept="image/*" style="display:none;"
+                            onchange="document.getElementById('file-label').textContent = this.files[0]?.name || 'Nenhum arquivo escolhido'">
+                    </div>
+                </div>
 
-            {{-- IMAGEM DE CAPA --}}
-            <div>
-                <label for="image" class="block text-sm font-semibold text-gray-700 mb-1">
-                    Imagem de Capa
-                </label>
-                <input type="file" name="image" id="image" accept="image/*"
-                       onchange="previewImagem(event)"
-                       class="w-full text-sm text-gray-600 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:bg-blue-900 file:text-white file:text-sm file:font-semibold hover:file:bg-blue-800">
+                <div style="display:grid; grid-template-columns:1fr 1fr; gap:16px; margin-bottom:28px;">
+                    <div>
+                        <label style="display:block; font-size:0.85rem; font-weight:600; color:#333; margin-bottom:8px;">Categoria</label>
+                        <select name="category_id" style="width:100%; padding:13px 16px; border:1.5px solid #e0e0e0; border-radius:10px; font-size:0.95rem; box-sizing:border-box; outline:none; background:#fff; color:#333;">
+                            @foreach($categories as $category)
+                                <option value="{{ $category->id }}" {{ old('category_id') == $category->id ? 'selected' : '' }}>{{ $category->name }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                    <div>
+                        <label style="display:block; font-size:0.85rem; font-weight:600; color:#333; margin-bottom:8px;">Status</label>
+                        <select name="status" style="width:100%; padding:13px 16px; border:1.5px solid #e0e0e0; border-radius:10px; font-size:0.95rem; box-sizing:border-box; outline:none; background:#fff; color:#333;">
+                            <option value="draft" {{ old('status','draft') == 'draft' ? 'selected' : '' }}>Rascunho</option>
+                            <option value="published" {{ old('status') == 'published' ? 'selected' : '' }}>Publicado</option>
+                        </select>
+                    </div>
+                </div>
 
-                <img id="preview" src="#" alt="Pré-visualização"
-                     class="hidden mt-3 w-full max-h-64 object-cover rounded-lg border border-gray-200">
-            </div>
+                <div style="display:flex; justify-content:flex-end; gap:16px; align-items:center;">
+                    <a href="{{ route('articles.index') }}" style="color:#888; text-decoration:none; font-size:0.875rem;">Cancelar</a>
+                    <button type="submit"
+                        style="background:#1a237e; color:#fff; border:none; padding:12px 32px; border-radius:50px; font-size:0.95rem; font-weight:600; cursor:pointer;">
+                        Salvar Matéria
+                    </button>
+                </div>
 
-            {{-- CONTEÚDO --}}
-            <div>
-                <label for="body" class="block text-sm font-semibold text-gray-700 mb-1">
-                    Conteúdo <span class="text-red-500">*</span>
-                </label>
-                <textarea name="body" id="body" rows="14" required
-                          class="w-full border border-gray-300 rounded-lg px-4 py-2 text-sm leading-relaxed focus:outline-none focus:ring-2 focus:ring-blue-900"
-                          placeholder="Escreva o conteúdo completo da matéria...">{{ old('body') }}</textarea>
-            </div>
-
-            {{-- AÇÕES --}}
-            <div class="flex items-center justify-end gap-3 pt-4 border-t border-gray-100">
-                <a href="{{ route('articles.index') }}"
-                   class="px-5 py-2 rounded-full text-sm font-semibold text-gray-600 hover:bg-gray-100 transition">
-                    Cancelar
-                </a>
-                <button type="submit"
-                        class="px-6 py-2 rounded-full text-sm font-semibold bg-blue-900 hover:bg-blue-800 text-white transition">
-                    Publicar Matéria
-                </button>
-            </div>
-
-        </form>
-
+            </form>
+        </div>
     </div>
-
-    <script>
-        function previewImagem(event) {
-            const preview = document.getElementById('preview');
-            const file = event.target.files[0];
-
-            if (file) {
-                preview.src = URL.createObjectURL(file);
-                preview.classList.remove('hidden');
-            } else {
-                preview.classList.add('hidden');
-            }
-        }
-    </script>
-
+</div>
 @endsection

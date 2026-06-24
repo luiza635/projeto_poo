@@ -15,15 +15,27 @@ Route::get('/', function () {
     if (!Auth::check()) {
         return redirect()->route('login');
     }
-
     $user = Auth::user();
-
     return in_array($user->role, ['admin', 'jornalista'])
         ? redirect()->route('jornalista.dashboard')
         : redirect()->route('user.dashboard');
 })->name('home');
 
-// ROTAS SÓ PARA JORNALISTA/ADMIN (criar, editar, excluir)
+// ROTA PÚBLICA DE CATEGORIA (sem precisar de login)
+Route::get('/categoria/{category:slug}', [CategoryController::class, 'show'])
+    ->name('category.show');
+
+// ROTA TEMPORÁRIA DE DIAGNÓSTICO
+Route::get('/debug-auth', function () {
+    return [
+        'autenticado' => Auth::check(),
+        'usuario' => Auth::user(),
+        'session_id' => session()->getId(),
+        'guard_padrao' => config('auth.defaults.guard'),
+    ];
+});
+
+// ROTAS SÓ PARA JORNALISTA/ADMIN
 Route::middleware(['auth', 'journalist'])->group(function () {
 
     Route::get('/jornalista', [JournalistController::class, 'dashboard'])
@@ -38,7 +50,7 @@ Route::middleware(['auth', 'journalist'])->group(function () {
 
 });
 
-// ROTAS DO USUÁRIO COMUM (somente leitura)
+// ROTAS DO USUÁRIO COMUM
 Route::middleware('auth')->group(function () {
 
     Route::get('/painel', [UserDashboardController::class, 'index'])

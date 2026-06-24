@@ -1,3 +1,8 @@
+extends('layouts.app')
+
+section('content')
+
+
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
@@ -449,41 +454,8 @@
 </head>
 
 <body>
+@include('layouts.navigation')
 
-<header class="navbar">
-    <div class="navbar-content">
-        <a href="/" class="logo">g2</a>
-
-        <nav class="menu">
-            <a href="#">Política</a>
-            <a href="#">Economia</a>
-            <a href="#">Tecnologia</a>
-            <a href="#">Esportes</a>
-            <a href="#">Entretenimento</a>
-            <a href="#">Ciência</a>
-            <a href="#">Saúde</a>
-        </nav>
-
-        <div class="user-area">
-            @auth
-                <div class="user-box">
-                    <div class="user-icon">⚙</div>
-                    <div>
-                        <strong>{{ auth()->user()->name }}</strong>
-                        <span>User</span>
-                    </div>
-                </div>
-
-                <form method="POST" action="{{ route('logout') }}">
-                    @csrf
-                    <button type="submit" class="exit-btn">↪</button>
-                </form>
-            @else
-                <a href="/login" class="login-text">Entrar</a>
-            @endauth
-        </div>
-    </div>
-</header>
 
 <main class="container">
 
@@ -625,6 +597,6 @@
     </section>
 
 </main>
-
+@endsection
 </body>
 </html>

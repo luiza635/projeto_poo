@@ -34,7 +34,7 @@
 
             <h2 class="text-lg font-bold text-gray-800">Últimas notícias</h2>
 
-            @forelse($articles->reject(fn($a) => $destaque && $a->id === $destaque->id) as $item)
+            @forelse($articles->skip(1) as $item)
             <a href="{{ route('user.article.show', $item) }}"
                class="bg-white rounded-xl shadow p-4 flex gap-4 hover:shadow-lg transition">
 
@@ -77,7 +77,7 @@
 
         @include('partials.weather-card')
 
-        <!-- CARD DE GALERIA (substitui Ações Rápidas) -->
+        <!-- CARD DE GALERIA -->
         <div class="bg-white rounded-2xl shadow p-5">
             <h3 class="font-bold text-blue-900 mb-4">Galeria</h3>
 

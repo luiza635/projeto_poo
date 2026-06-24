@@ -11,27 +11,25 @@ class ArticleController extends Controller
     public function index()
     {
         return view('journalist.articles.index', [
-            'articles' => Article::with('category')->latest()->get()
+            'articles' => Article::latest()->get()
         ]);
     }
 
     public function create()
     {
-        return view('journalist.articles.create', [
-            'categories' => Category::orderBy('name')->get()
-        ]);
+        $categories = Category::orderBy('name')->get();
+        return view('journalist.articles.create', compact('categories'));
     }
 
     public function store(Request $request)
     {
         $data = $request->validate([
-            'title' => 'required|string|max:150',
-            'subtitle' => 'nullable|string|max:250',
-            'body' => 'required|string',
-            'category_id' => 'required|exists:categories,id',
-            'status' => 'required|in:draft,published',
-            'tags' => 'nullable|string|max:255',
-            'image' => 'nullable|image|max:4096',
+            'title'       => 'required|string|max:150',
+            'subtitle'    => 'nullable|string|max:250',
+            'body'        => 'required',
+            'category_id' => 'nullable|exists:categories,id',
+            'status'      => 'required|in:draft,published',
+            'image'       => 'nullable|image|max:4096',
         ]);
 
         if ($request->hasFile('image')) {
@@ -40,30 +38,27 @@ class ArticleController extends Controller
         }
 
         unset($data['image']);
-
         Article::create($data);
 
-        return redirect()->route('articles.index')->with('success', 'Materia criada com sucesso!');
+        return redirect()->route('articles.index')
+            ->with('success', 'Matéria publicada!');
     }
 
     public function edit(Article $article)
     {
-        return view('journalist.articles.edit', [
-            'article' => $article,
-            'categories' => Category::orderBy('name')->get()
-        ]);
+        $categories = Category::orderBy('name')->get();
+        return view('journalist.articles.edit', compact('article', 'categories'));
     }
 
     public function update(Request $request, Article $article)
     {
         $data = $request->validate([
-            'title' => 'required|string|max:150',
-            'subtitle' => 'nullable|string|max:250',
-            'body' => 'required|string',
-            'category_id' => 'required|exists:categories,id',
-            'status' => 'required|in:draft,published',
-            'tags' => 'nullable|string|max:255',
-            'image' => 'nullable|image|max:4096',
+            'title'       => 'required|string|max:150',
+            'subtitle'    => 'nullable|string|max:250',
+            'body'        => 'required',
+            'category_id' => 'nullable|exists:categories,id',
+            'status'      => 'required|in:draft,published',
+            'image'       => 'nullable|image|max:4096',
         ]);
 
         if ($request->hasFile('image')) {
@@ -72,15 +67,20 @@ class ArticleController extends Controller
         }
 
         unset($data['image']);
-
         $article->update($data);
 
-        return redirect()->route('articles.index')->with('success', 'Materia atualizada com sucesso!');
+        return redirect()->route('articles.index')
+            ->with('success', 'Matéria atualizada!');
     }
 
     public function destroy(Article $article)
     {
         $article->delete();
-        return back()->with('success', 'Materia excluida com sucesso!');
+        return back()->with('success', 'Matéria excluída!');
+    }
+
+    public function show(Article $article)
+    {
+        return view('journalist.articles.show', compact('article'));
     }
 }

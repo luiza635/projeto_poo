@@ -17,16 +17,15 @@
         <!-- LOGO -->
         <h1 class="text-3xl font-bold shrink-0">g2</h1>
 
-        <!-- MENU -->
+        <!-- MENU (dinâmico — lê do banco automaticamente) -->
         <nav class="hidden md:flex items-center gap-7 text-sm font-semibold">
-            <a href="#" class="hover:text-blue-200 transition">Início</a>
-            <a href="#" class="hover:text-blue-200 transition">Brasil</a>
-            <a href="#" class="hover:text-blue-200 transition">Mundo</a>
-            <a href="#" class="hover:text-blue-200 transition">Política</a>
-            <a href="#" class="hover:text-blue-200 transition">Economia</a>
-            <a href="#" class="hover:text-blue-200 transition">Tecnologia</a>
-            <a href="#" class="hover:text-blue-200 transition">Esportes</a>
-            <a href="#" class="hover:text-blue-200 transition">Saúde</a>
+            <a href="{{ route('home') }}" class="hover:text-blue-200 transition">Início</a>
+            @foreach(App\Models\Category::orderBy('name')->get() as $cat)
+                <a href="{{ route('category.show', $cat->slug) }}"
+                   class="hover:text-blue-200 transition whitespace-nowrap">
+                    {{ $cat->name }}
+                </a>
+            @endforeach
         </nav>
 
         <!-- USUÁRIO + SAIR -->

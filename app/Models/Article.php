@@ -17,7 +17,6 @@ class Article extends Model
         'image_url',
         'category_id',
         'status',
-        'tags',
     ];
 
     public function category(): BelongsTo
